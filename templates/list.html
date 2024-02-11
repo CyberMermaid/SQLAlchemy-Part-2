@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Users{% endblock %}
+
+{% block content %}
+  {% if users %}
+    <ul>
+      {% for user in users %}
+        <li><a href="/{{ user.id }}">{{ user.first_name }} {{user.last_name}}</a></li>
+        <!-- <li><a href="/{{ user.image_url }}">{{ user.first_name }} {{user.last_name}}</a></li> -->
+      {% endfor %}
+    </ul>
+    <button>Add user</button>
+  {% endif %}
+{% endblock %}
