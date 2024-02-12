@@ -1,5 +1,5 @@
 from flask import Flask, request, render_template, redirect, flash, session
-from models import db, connect_db, User
+from models import db, connect_db, User, Post
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_sqlalchemy import SQLAlchemy
 
@@ -10,7 +10,7 @@ app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
 debug = DebugToolbarExtension(app)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///cyber_ace'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///postDB'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 
@@ -88,6 +88,48 @@ def delete_user(user_id):
     db.session.commit()
     # flash('User deleted successfully.')
     return redirect('/users')
+
+# **GET */users/[user-id]/posts/new :*** 
+@app.route('/users/<int:user_id>/posts/new', methods=['GET'])
+def add_post(user_id):
+    """Show form to add a post for that user."""
+    user = Post.query.query.get_or_404(user_id)
+    return render_template('postForm.html', user=user)
+
+# Source: https://www.geeksforgeeks.org/bootstrap-vertical-forms-horizontal-forms-inline-forms/
+
+# **POST */users/[user-id]/posts/new :*** Handle add form; add post and redirect to the user detail page.
+@app.route('/users/<int:user_id>/posts/new', methods=['POST'])
+def process_post(user_id):
+    """Process postform submission by adding post and redirecting to the user detail page."""
+    title = request.args["title"]
+    content = request.args["content"]
+    # Create a new post object
+    new_post = Post(title=title, content=content, user_id=Post.user_id)
+
+     # Add the new post to the database
+    db.session.add(new_post)
+    db.session.commit()
+    return redirect('/users/<int:user_id>')
+
+# **GET */posts/[post-id] :*** Show a post. Show buttons to edit and delete the post.
+@app.route('/post/<int:id>', methods=['GET'])
+def show_post(id):
+    return render_template(userPost.html, id=id)
+
+
+# **GET */posts/[post-id]/edit :*** Show form to edit a post, and to cancel (back to user page).
+
+# **POST */posts/[post-id]/edit :*** Handle editing of a post. Redirect back to the post view.
+
+# **POST */posts/[post-id]/delete :*** Delete the post.
+@app.route('/post/<int:id>/delete', methods=['POST'])
+def process_post(id):
+    """Process postform submission by adding post and redirecting to the user detail page."""
+    post = Post.query.get_or_404(id)
+    db.session.delete(post)
+    db.session.commit()
+    return redirect('/post')
 
 if __name__ == '__main__':
     app.run(debug=True)

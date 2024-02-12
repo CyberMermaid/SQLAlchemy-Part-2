@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA+zgYd8UJxFvh8EzF+Ka1y/7M+M7F5e0l1fZ9J8XQzj4M+Iz5/9vD" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container">
+        <h4> Add Post for {{user.first_name}} {{user.last_name}}</h4>
+        <form action="/users/user_id/posts/new">
+          <div class="mb-3 row">
+            <label for="id1" class="col-sm-2 col-form-label">Title</label>
+            <div class="col-sm-10">
+              <input class="form-control" type="text" id="id1" name="title">
+            </div>
+          </div>
+          <div class="mb-3 row">
+            <label for="id2" class="col-sm-2 col-form-label">Content</label>
+            <div class="col-sm-10">
+              <textarea class="form-control" id="id2" name="content" rows="3"></textarea>
+            </div>
+          </div>
+          <div class="container">
+            <button type="button" class="btn btn-secondary">Cancel</button>
+            <button type="button" class="btn btn-primary">Add</button>
+          </div>
+        </form>
+      </div>
+
+</body>
+</html>
